@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width,height=device-height">
+      <title>预算差异展示</title>
+      <style>::-webkit-scrollbar{display:none;}html,body{overflow:hidden;height:100%;margin:0;}</style>
+</head>
+<body>
+<div id="mountNode"></div>
+<script>/*Fixing iframe window.innerHeight 0 issue in Safari*/document.body.clientHeight;</script>
+<script src="https://gw.alipayobjects.com/os/antv/pkg/_antv.g2-3.5.1/dist/g2.min.js"></script>
+<script src="https://gw.alipayobjects.com/os/antv/pkg/_antv.data-set-0.10.1/dist/data-set.min.js"></script>
+<script src="https://gw.alipayobjects.com/os/antv/assets/lib/jquery-3.2.1.min.js"></script>
+<style>
+        /* table sty;e */
+            .g2-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            border-radius: 4px 4px 0 0;
+            table-layout: fixed;
+            }
+            .g2-thead {
+            display: table-header-group;
+            vertical-align: middle;
+            border-bottom-color: #e8e8e8;
+            border-bottom-style: solid;
+            border-bottom-width: 1px;
+            background-color: #fafafa
+            }
+            .th-index {
+            width: 30px;
+            }
+            .g2-thead th {
+            text-align: center;
+            height: 30px;
+            font-size: 12px;
+            }
+            .th-index {
+            width: 10%;
+            }
+            .th-country {
+            width: 20%;
+            }
+            .g2-table-row {
+            height: 30px;
+            vertical-align: middle;
+            border-bottom-style: solid;
+            border-bottom-width: 1px;
+            border-bottom-color: #e8e8e8;
+            }
+            .g2-table-column {
+            font-size: 12px;
+            color: #8c8c8c;
+            padding: 15px;
+            text-align: center
+            }
+            /*tooltip style*/
+            .g2-tooltip {
+            position: absolute;
+            background-color: rgba(255, 255, 255, 1.0);
+            border-radius: 3px;
+            color: rgb(87, 87, 87);
+            font-size: 12px;
+            line-height: 20px;
+            padding: 10px 10px 6px 10px;
+            box-shadow: 0px 0px 10px #aeaeae;
+            pointer-events: none;
+            text-align: left;
+            z-index: 1000;
+            }
+            .g2-tooltip-list {
+            margin: 0;
+            padding: 0px 60px 0px 0px;
+            list-style-type: none;
+            }
+            .g2-tooltip-value {
+            margin-left: 30px;
+            display: inline;
+            }
+            .tooltip-pie {
+            width: 40px;
+            height: 40px;
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            margin-top: -20px;
+            z-index: 1000;
+            }
+</style>
+<!-- table -->
+<table class="g2-table">
+      <!--head-->
+      <thead class="g2-thead">
+            <tr>
+                  <th class="th-index">序号</th>
+                  <th class="th-id">项目</th>
+                  <th class="th-time">投票</th>
+            </tr>
+      </thead>
+      <!--body-->
+      <tbody>
+      </tbody>
+</table>
+<script>
+      var data = [{
+      index: 1,
+      item: '差旅费',
+      percentage: [{
+            type: '同意',
+            value: 0.8,
+            adjust: 'a',
+            country: '差旅费'
+      }, {
+            type: '反对',
+            value: 0.2,
+            adjust: 'a',
+            country: '差旅费'
+      }]
+      }, {
+      index: 2,
+      country: '越南',
+      percentage: [{
+            type: '世界杯',
+            value: 0.7,
+            adjust: 'a',
+            country: '越南'
+      }, {
+            type: 'NBA',
+            value: 0.3,
+            adjust: 'a',
+            country: '越南'
+      }]
+      }, {
+      index: 3,
+      country: '波兰',
+      percentage: [{
+            type: '世界杯',
+            value: 0.6,
+            adjust: 'a',
+            country: '波兰'
+      }, {
+            type: 'NBA',
+                  value: 0.4,
+            adjust: 'a',
+            country: '波兰'
+      }]
+      }, {
+      index: 4,
+      country: '印度尼西亚',
+      percentage: [{
+            type: '世界杯',
+            value: 0.4,
+            adjust: 'a',
+            country: '印度尼西亚'
+      }, {
+            type: 'NBA',
+            value: 0.6,
+            adjust: 'a',
+            country: '印度尼西亚'
+      }]
+      }, {
+      index: 5,
+      country: '俄罗斯',
+      percentage: [{
+            type: '世界杯',
+            value: 0.3,
+            adjust: 'a',
+            country: '俄罗斯'
+      }, {
+            type: 'NBA',
+            value: 0.7,
+            adjust: 'a',
+            country: '俄罗斯'
+      }]
+      }];
+  //append data
+      var $tbody = $('.g2-table').children('tbody');
+      data.forEach(function(d, index) {
+    //create container
+      var $tr = $('<tr class="g2-table-row"></tr>');
+      $tbody.append($tr);
+    //index
+      var $index = $('<td class="g2-table-column g2-table-column-index">' + d.index + '</td>');
+      $tr.append($index);
+    //item
+      var $item = $('<td class="g2-table-column">' + d.item + '</td>');
+      $tr.append($item);
+    //time
+      var percentID = 'bar-chart-' + index;
+      var $percent = $('<td class="g2-table-column g2-table-percentage"><div class="chartContainer" id="' + percentID + '"></div></td>');
+      $tr.append($percent);
+      createStackBarChart(percentID, d.percentage, index);
+      });
+
+      function createStackBarChart(containerId, data, index) {
+      var chart = new G2.Chart({
+      container: containerId,
+      forceFit: true,
+      height: 30,
+      padding: [0, 50, 0, 50]
+      });
+      chart.source(data);
+      chart.legend(false);
+      chart.tooltip({
+      htmlContent: function htmlContent(title, items) {
+            var pieData = [];
+            var container = '<div class="g2-tooltip">';
+            var titleDom = '<div class="g2-tooltip-title" style="margin-bottom: 4px;">' + items[0].point._origin.country + '</div>';
+            var listDom = '<ul class="g2-tooltip-list">';
+            for (var i = 0; i < items.length; i++) {
+            var item = items[i];
+            var itemDom = '<li data-index={index}>' + '<span style="background-color:' + item.color + ';width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:8px;"></span>' + item.name + '<span class="g2-tooltip-value">' + item.value + '</span>' + '</li>';
+            listDom += itemDom;
+            pieData.push(item.point._origin);
+            }
+            listDom += '</ul>';
+            var chartDom = '<div id="g2-tooltip-pie' + index + '" class="tooltip-pie"></div>';
+            setTimeout(function() {
+            drawTooltipPieChart('g2-tooltip-pie' + index, pieData);
+            }, 10);
+            return container + titleDom + listDom + chartDom + '</div>';
+            }
+      });
+      chart.axis(false);
+      chart.coord().transpose();
+      chart.intervalStack().position('adjust*value').color('type').size(30).opacity(1);
+      chart.render();
+      }
+
+      function drawTooltipPieChart(container, data) {
+      var chart = new G2.Chart({
+      container: container,
+      width: 40,
+      height: 40,
+      padding: 0,
+      animate: false
+      });
+      chart.source(data);
+      chart.legend(false);
+      chart.axis(false);
+      chart.tooltip(false);
+      chart.coord('theta', {
+      radius: 0.75,
+            innerRadius: 0.5
+      });
+      chart.intervalStack().position('value').color('type', ['#2194ff', '#37c461']).opacity(1);
+      chart.render();
+      }
+</script></body>
+</html>

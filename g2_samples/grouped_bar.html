@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width,height=device-height">
+      <title>分组条形图</title>
+      <style>::-webkit-scrollbar{display:none;}html,body{overflow:hidden;height:100%;margin:0;}</style>
+      </head>
+      <body>
+      <div id="mountNode"></div>
+      <script>/*Fixing iframe window.innerHeight 0 issue in Safari*/document.body.clientHeight;</script>
+      <script src="https://gw.alipayobjects.com/os/antv/pkg/_antv.g2-3.5.1/dist/g2.min.js"></script>
+      <script src="https://gw.alipayobjects.com/os/antv/pkg/_antv.data-set-0.10.1/dist/data-set.min.js"></script>
+      <script>
+      var data = [{
+      "label": "招待费",
+      "type": "预算",
+      "value": 2800
+      }, {
+      "label": "招待费",
+      "type": "实际",
+      "value": 2260
+      }, {
+      "label": "差旅费",
+      "type": "预算",
+      "value": 2800
+      }, {
+      "label": "差旅费",
+      "type": "实际",
+      "value": 2300
+      }, {
+      "label": "保险费",
+      "type": "预算",
+      "value": 3950
+      }, {
+      "label": "保险费",
+      "type": "实际",
+      "value": 3900
+      }, {
+      "label": "税金",
+      "type": "预算",
+      "value": 5500
+      }, {
+      "label": "税金",
+      "type": "实际",
+      "value": 5390
+      }, {
+      "label": "租赁费",
+      "type": "预算",
+      "value": 1170
+      }, {
+      "label": "租赁费",
+      "type": "实际",
+      "value": 1100
+      }];
+      var chart = new G2.Chart({
+      container: 'mountNode',
+      forceFit: true,
+      height: window.innerHeight
+      });
+      chart.source(data);
+      chart.axis('value', {
+      position: 'right'
+      });
+      chart.axis('label', {
+      label: {
+            offset: 24
+      }
+      });
+      chart.coord().transpose().scale(1, -1);
+      chart.interval().position('label*value').color('type').adjust([{
+      type: 'dodge',
+      marginRatio: 1 / 32
+      }]);
+      chart.render();
+      </script>
+</body>
+</html>

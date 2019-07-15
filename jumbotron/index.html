@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Lv">
+
+
+    <title>报告模板</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../static/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="jumbotron.css" rel="stylesheet">
+  </head>
+
+  <body>
+
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+      <a class="navbar-brand" href="#">预算完成</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="#">月度 <span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Link</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link disabled" href="#">Disabled</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">可执行动作</a>
+            <div class="dropdown-menu" aria-labelledby="dropdown01">
+              <a class="dropdown-item" href="#">申请预算</a>
+              <a class="dropdown-item" href="#">退回预算</a>
+              <a class="dropdown-item" href="#">Something else here</a>
+            </div>
+          </li>
+        </ul>
+        <form class="form-inline my-2 my-lg-0">
+          <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
+          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>
+      </div>
+    </nav>
+
+    <main role="main">
+
+      <!-- Main jumbotron for a primary marketing message or call to action -->
+      <div class="jumbotron">
+        <div class="container">
+          <h1 class="display-3">XX营业部19年06月预算完成</h1>
+          <p>本月预算完成情况.</p>
+          <p><a class="btn btn-primary btn-lg" href="#" role="button">更多信息 &raquo;</a></p>
+        </div>
+      </div>
+
+      <div class="container">
+        <!-- Example row of columns -->
+        <div class="row">
+          <div class="col-12">
+              <div id="mountNode"></div>
+              <script>/*Fixing iframe window.innerHeight 0 issue in Safari*/document.body.clientHeight;</script>
+              <script src="https://gw.alipayobjects.com/os/antv/pkg/_antv.g2-3.5.1/dist/g2.min.js"></script>
+              <script src="https://gw.alipayobjects.com/os/antv/pkg/_antv.data-set-0.10.1/dist/data-set.min.js"></script>
+              <script src="https://gw.alipayobjects.com/os/antv/assets/lib/jquery-3.2.1.min.js"></script>
+              <script>
+              var data = [{
+              month: 1,
+              budget: 35,
+              actual: 70
+              }, {
+              month: 2,
+              budget: 59,
+              actual: 81
+              }, {
+              month: 3,
+              budget: 76,
+              actual: 96
+              }, {
+              month: 4,
+              budget: 65,
+              actual: 97
+              }, {
+              month: 5,
+              budget: 67,
+              actual: 93
+              }, {
+              month: 6,
+              budget: 79,
+              acutal: 90
+              }, {
+              month: 7,
+              budget: 115,
+              actual: 79
+              }, {
+              month: 8,
+              budget: 163,
+              actual: 85
+              }, {
+              month: 9,
+              budget: 185,
+              actual: 93
+              }];
+              var ds = new DataSet();
+              var dv = ds.createView().source(data);
+              dv.transform({
+              type: 'map',
+              callback: function callback(row) {
+                    row.range = [row.budget, row.actual];
+                    return row;
+              }
+              });
+              dv.transform({
+              type: 'fold',
+              fields: ['budget', 'actual'],
+              key: 'type',
+              value: 'value'
+              });
+              var chart = new G2.Chart({
+              container: 'mountNode',
+              forceFit: true,
+              height: window.innerHeight,
+              padding: [20, 100, 50, 30]
+              });
+              chart.source(dv, {
+              value: {
+                    min: 0,
+                    max: 200
+              },
+              range: {
+                    min: 0,
+                    max: 200
+              }
+              });
+              chart.axis('range', false);
+              chart.axis('month', {
+              label: {
+                    textStyle: {
+                    fill: '#aaaaaa'
+                    }
+              }
+              });
+              chart.axis('value', {
+              label: {
+                    textStyle: {
+                    fill: '#aaaaaa'
+                    }
+              }
+              });
+              chart.legend({
+              attachLast: true
+              });
+              chart.tooltip({
+              crosshairs: {
+                    type: 'line'
+              }
+              });
+              chart.line().position('month*value').color('type', ['#F5222D', '#FAAD14']).size(2.5).shape('smooth');
+              chart.area().position('month*range').color('#ffffff').shape('smooth').tooltip(false).opacity(0.4);
+              chart.guide().regionFilter({
+              top: true,
+              start: [1, 'min'],
+              end: [9, 'max'],
+              color: '#F5222D',
+              apply: ['area']
+              });
+              chart.guide().regionFilter({
+              top: true,
+              start: [1, 'min'],
+              end: [9, 'max'],
+              color: '#FAAD14',
+              apply: ['area']
+              });
+              chart.guide().dataMarker({
+              position: [1753, 87],
+              content: '1755 年在印度周边建立诸多殖民\n地与附属国，垄断出口贸易，导致\n出品总额激增。',
+              lineLength: 50,
+              style: {
+                    text: {
+                    textAlign: 'left',
+                    fontSize: 12
+                    },
+                    point: {
+                    stroke: '#FF4D4F'
+                    }
+              },
+              direction: 'downward'
+              });
+              chart.guide().text({
+              top: true,
+              position: [1730, 80],
+              content: '贸易赤字',
+              style: {
+                    fontSize: 14,
+                    fontWeight: 'normal',
+                    fill: 'rgba(0,0,0,0.45)'
+              }
+              });
+              chart.guide().text({
+              top: true,
+              position: [1765, 110],
+              content: '贸易盈余',
+              style: {
+                    fontSize: 14,
+                    fontWeight: 'normal',
+                    fill: 'rgba(0,0,0,0.45)'
+              }
+              });
+              chart.render();
+              </script>
+            <p><a class="btn btn-secondary" href="#" role="button">View details &raquo;</a></p>
+          
+        </div>
+
+        <hr>
+      </div>
+      </div> <!-- /container -->
+
+    </main>
+
+    <footer class="container">
+      <p>&copy; Lv 2019-2020</p>
+    </footer>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script>window.jQuery || document.write('<script src="../../../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
+    <script src="../../../../assets/js/vendor/popper.min.js"></script>
+    <script src="../../../../dist/js/bootstrap.min.js"></script>
+  </body>
+</html>
