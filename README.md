@@ -8,3 +8,8 @@ list the work need to be automated:
 - show the accounting code for offices
 
 
+19/07/15
+add some files for my project
+- main entry point: main
+- the budget display
+- flash report input
