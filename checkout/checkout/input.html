@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en">
+<head>
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+      <meta name="description" content="">
+      <meta name="author" content="Lv">
+
+      <title>快报填写</title>
+
+      <!-- Bootstrap core CSS -->
+      <link href="../static/bootstrap.min.css" rel="stylesheet">
+
+      <!-- Custom styles for this template -->
+      <link href="../static/form-validation.css" rel="stylesheet">
+</head>
+
+<body class="bg-light">
+      <nav class="site-header sticky-top py-1">
+                        <div class="container d-flex flex-column flex-md-row justify-content-between">
+                        <a class="py-2 d-none d-md-inline-block" href="#">书籍简介</a>
+                        <a class="py-2 d-none d-md-inline-block" href="#">案例选编</a>
+                        <a class="py-2 d-none d-md-inline-block" href="#">听众留言</a>
+                        <a class="py-2 d-none d-md-inline-block" href="#">回到首页</a>
+                        </div>
+      </nav>
+
+      <div class="container">
+      <div class="py-sm-2 text-center">
+            <h2>快报</h2>
+            <p class="lead">以外币万元填写</p>
+      </div>
+
+      <div class="row">
+            <section id="input">
+                  <div class="container mt-xl-2">
+                        <form id="book-form">
+                              <div class="form-check-inline">
+                                    <div class="form-group">
+                                          <select type="text" id="type" class="form-control">
+                                          <option value="travel">差旅费</option>
+                                          <option value="food">招待费</option>
+                                          <option value="rent">租赁费</option>
+                                          <option value="insurance">保险费</option>
+                                          </select>
+                                          <label for="type">类别</label>
+                                    </div>
+                                    <div class="form-group">
+                                          <input type="number" id="amount" class="form-control">
+                                          <label for="amount">金额</label>
+                                    </div>
+                                    <div class="form-group">
+                                          <input type="text" id="desc" class="form-control">
+                                          <label for="desc">简述</label>
+                                    </div>
+                              </div>
+                              <input type="submit" value="记一笔" class="btn btn-primary">
+                        </form>
+                        <table class="table table-striped mt-5">
+                                    <thead>
+                                    <tr>
+                                    <th>类别</th>
+                                    <th>金额</th>
+                                    <th>简述</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="book-list"></tbody>
+                        </table>
+                  </div>
+            </section>
+            
+            <a class="btn btn-outline-success" href="./display/display.html">确定提交</a>
+
+      </div>
+
+      <footer class="my-5 pt-5 text-muted text-center text-small">
+            <p class="mb-1">&copy; 2019-2020 Lv</p>
+            <ul class="list-inline">
+            <li class="list-inline-item"><a href="#">第一项</a></li>
+            <li class="list-inline-item"><a href="#">第二项</a></li>
+            <li class="list-inline-item"><a href="#">第三项</a></li>
+            </ul>
+      </footer>
+      </div>
+
+<!-- Bootstrap core JavaScript
+      ================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script>window.jQuery || document.write('<script src="../../../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
+<script src="../../../../assets/js/vendor/popper.min.js"></script>
+<script src="../../../../dist/js/bootstrap.min.js"></script>
+<script src="../../../../assets/js/vendor/holder.min.js"></script>
+<script type="text/javascript">
+      // Book Class: Represents a Book
+class Book {
+      constructor(type, amount, desc) {
+            this.type = type;
+            this.amount = amount;
+            this.desc = desc;
+            }
+      }
+            
+        // UI Class: Handle UI Tasks
+class UI {
+            static displayBooks() {
+            const books = Store.getBooks();
+            
+            books.forEach((book) => UI.addBookToList(book));
+            }
+            
+            static addBookToList(book) {
+            const list = document.querySelector('#book-list');
+            
+            const row = document.createElement('tr');
+            
+            row.innerHTML = `
+                  <td>${book.type}</td>
+                  <td>${book.amount}</td>
+                  <td>${book.desc}</td>
+                  <td><a href="#" class="btn btn-danger btn-sm delete">X</a></td>
+            `;
+            
+            list.appendChild(row);
+            }
+            
+            static deleteBook(el) {
+            if(el.classList.contains('delete')) {
+                  el.parentElement.parentElement.remove();
+            }
+            }
+            
+            static showAlert(message, className) {
+            const div = document.createElement('div');
+            div.className = `alert alert-${className}`;
+            div.appendChild(document.createTextNode(message));
+            const container = document.querySelector('.container');
+            const form = document.querySelector('#book-form');
+            container.insertBefore(div, form);
+            
+                // Vanish in 3 seconds
+            setTimeout(() => document.querySelector('.alert').remove(), 3000);
+            }
+            
+            static clearFields() {
+            document.querySelector('#type').value = '';
+            document.querySelector('#amount').value = '';
+            document.querySelector('#desc').value = '';
+            }
+            }
+            
+        // Store Class: Handles Storage
+class Store {
+            static getBooks() {
+            let books;
+            if(localStorage.getItem('books') === null) {
+                  books = [];
+            } else {
+                  books = JSON.parse(localStorage.getItem('books'));
+            }
+            
+            return books;
+            }
+            
+            static addBook(book) {
+            const books = Store.getBooks();
+            books.push(book);
+            localStorage.setItem('books', JSON.stringify(books));
+            }
+            
+            static removeBook(desc) {
+            const books = Store.getBooks();
+            
+            books.forEach((book, index) => {
+                  if(book.desc === desc) {
+                  books.splice(index, 1);
+                  }
+            });
+            
+            localStorage.setItem('books', JSON.stringify(books));
+            }
+            }
+            
+    // Event: Display Books
+document.addEventListener('DOMContentLoaded', UI.displayBooks);
+
+    // Event: Add a Book
+document.querySelector('#book-form').addEventListener('submit', (e) => {
+    // Prevent actual submit
+      e.preventDefault();
+      
+    // Get form values
+      const type = document.querySelector('#type').value;
+      const amount = document.querySelector('#amount').value;
+      const desc = document.querySelector('#desc').value;
+      
+    // Validate
+      if(type === '' || amount === '' || desc === '') {
+            UI.showAlert('每个项目都要填写', '请注意');
+      } else {
+    // Instantiate book
+      const book = new Book(type, amount, desc);
+      
+    // Add entry to UI
+      UI.addBookToList(book);
+      
+    // Add entry to store
+      Store.addBook(book);
+      
+    // Show success message
+      UI.showAlert('添加', '成功');
+      
+    // Clear fields
+      UI.clearFields();
+      }
+      });
+      
+    // Event: Remove a Book
+      document.querySelector('#book-list').addEventListener('click', (e) => {
+    // Remove book from UI
+      UI.deleteBook(e.target);
+      
+    // Remove book from store
+      Store.removeBook(e.target.parentElement.previousElementSibling.textContent);
+      
+    // Show success message
+      UI.showAlert('删除', '成功');
+      });
+</script>
+</body>
+</html>
