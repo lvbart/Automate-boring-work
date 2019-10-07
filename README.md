@@ -1,6 +1,6 @@
 # Automate boring work
 
-A reading and practicing log for the book automate the boring stuff with Python
+A reading and practicing log for the book automate the boring stuff  
 
 19/04/22
 list the work need to be automated:
