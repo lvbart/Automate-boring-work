@@ -54,4 +54,7 @@ mapping the project
   2.3 budget database  
   
   
-  3. what did I learn?  
+  3. what I learn?  
+  3.1 Git and Github  
+  
+  3.2 
