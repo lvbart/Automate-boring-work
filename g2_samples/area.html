@@ -3,7 +3,7 @@
       <head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width,height=device-height">
-      <title>丹麦-挪威王国 1700-1780 的进出口贸易</title>
+      <title>全球航空业 2008-2016 财务数据展示</title>
       <style>::-webkit-scrollbar{display:none;}html,body{overflow:hidden;height:100%;margin:0;}</style>
       </head>
       <body>
@@ -14,54 +14,54 @@
       <script src="https://gw.alipayobjects.com/os/antv/assets/lib/jquery-3.2.1.min.js"></script>
       <script>
       var data = [{
-      year: 1700,
-      exports: 35,
-      imports: 70
+      year: 2008,
+      收入: 35,
+      成本: 70
       }, {
-      year: 1710,
-      exports: 59,
-      imports: 81
+      year: 2009,
+      收入: 59,
+      成本: 81
       }, {
-      year: 1720,
-      exports: 76,
-      imports: 96
+      year: 2010,
+      收入: 76,
+      成本: 96
       }, {
-      year: 1730,
-      exports: 65,
-      imports: 97
+      year: 2011,
+      收入: 65,
+      成本: 97
       }, {
-      year: 1740,
-      exports: 67,
-      imports: 93
+      year: 2012,
+      收入: 67,
+      成本: 93
       }, {
-      year: 1750,
-      exports: 79,
-      imports: 90
+      year: 2013,
+      收入: 79,
+      成本: 90
       }, {
-      year: 1760,
-      exports: 115,
-      imports: 79
+      year: 2014,
+      收入: 115,
+      成本: 79
       }, {
-      year: 1770,
-      exports: 163,
-      imports: 85
+      year: 2015,
+      收入: 163,
+      成本: 85
       }, {
-      year: 1780,
-      exports: 185,
-      imports: 93
+      year: 2016,
+      收入: 185,
+      成本: 93
       }];
       var ds = new DataSet();
       var dv = ds.createView().source(data);
       dv.transform({
       type: 'map',
       callback: function callback(row) {
-            row.range = [row.exports, row.imports];
+            row.range = [row.收入, row.成本];
             return row;
       }
       });
       dv.transform({
       type: 'fold',
-      fields: ['exports', 'imports'],
+      fields: ['收入', '成本'],
       key: 'type',
       value: 'value'
       });
@@ -108,21 +108,21 @@
       chart.area().position('year*range').color('#ffffff').shape('smooth').tooltip(false).opacity(0.4);
       chart.guide().regionFilter({
       top: true,
-      start: [1700, 'min'],
-      end: [1753, 'max'],
+      start: [2008, 'min'],
+      end: [2016, 'max'],
       color: '#F5222D',
       apply: ['area']
       });
       chart.guide().regionFilter({
       top: true,
-      start: [1753, 'min'],
-      end: [1780, 'max'],
+      start: [2008, 'min'],
+      end: [2019, 'max'],
       color: '#FAAD14',
       apply: ['area']
       });
       chart.guide().dataMarker({
-      position: [1753, 87],
-      content: '1755 年在印度周边建立诸多殖民\n地与附属国，垄断出口贸易，导致\n出品总额激增。',
+      position: [2013, 79],
+      content: '油价下降\n导致需求激增。',
       lineLength: 50,
       style: {
             text: {
@@ -138,7 +138,7 @@
       chart.guide().text({
       top: true,
       position: [1730, 80],
-      content: '贸易赤字',
+      content: '赤字',
       style: {
             fontSize: 14,
             fontWeight: 'normal',
@@ -148,7 +148,7 @@
       chart.guide().text({
       top: true,
       position: [1765, 110],
-      content: '贸易盈余',
+      content: '盈余',
       style: {
             fontSize: 14,
             fontWeight: 'normal',
